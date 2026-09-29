@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LotoMaster · Baloto y Revancha</title>
+<meta name="description" content="Jugada de cada sorteo de Baloto y Revancha con combinaciones poco jugadas, valor esperado y verificación de tiquetes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23D99A0B'/%3E%3Ctext x='16' y='21' font-size='14' text-anchor='middle' font-family='monospace' font-weight='700' fill='%2318231F'%3ELM%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand">
+    <div class="eyebrow">Baloto + Revancha · 5/43 + superbalota</div>
+    <h1>LotoMaster</h1>
+  </div>
+  <div class="next" aria-live="polite">
+    <div class="eyebrow">Próximo sorteo</div>
+    <div class="next-date" id="next-date">…</div>
+    <div class="jackpots">
+      <div><span class="muted small">Baloto</span><b id="jp-b">…</b></div>
+      <div><span class="muted small">Revancha</span><b id="jp-r">…</b></div>
+    </div>
+  </div>
+</header>
+
+<section class="card play" aria-labelledby="h-play">
+  <div class="play-head">
+    <div>
+      <h2 id="h-play">Tu jugada para este sorteo</h2>
+      <p class="muted small">La misma combinación juega en Baloto ($6.000) y, si la agregas, en Revancha (+$3.000).</p>
+    </div>
+    <div class="controls">
+      <label for="n-combos">Combinaciones
+        <select id="n-combos">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option>
+        </select></label>
+      <button id="btn-gen" type="button">Generar</button>
+    </div>
+  </div>
+  <div id="combos" class="combos"></div>
+  <div class="play-foot">
+    <span class="small muted" id="cost"></span>
+    <div class="btnrow">
+      <button id="btn-copy" type="button" class="ghost">Copiar</button>
+      <button id="btn-save" type="button" class="ghost">Guardar en mis jugadas</button>
+    </div>
+  </div>
+  <details class="why">
+    <summary>¿Cómo se eligen estos números?</summary>
+    <p>Todas las combinaciones tienen la misma probabilidad de ganar: 1 en 15.401.568. El análisis de 1.042 sorteos reales mostró que ninguna técnica (números calientes, fríos, atrasados, parejas o inteligencia artificial) predice mejor que el azar. Por eso LotoMaster optimiza lo único que sí se puede controlar:</p>
+    <ul>
+      <li><b>No compartir el premio.</b> Evita lo que más juega la gente: fechas (todos los números ≤ 31), consecutivos, progresiones, múltiplos, mismas terminaciones, figuras y combinaciones que ya salieron.</li>
+      <li><b>Cubrir más terreno.</b> Si juegas varias combinaciones, no comparten más de 2 números entre sí ni la misma superbalota, así no repites apuestas parecidas.</li>
+      <li><b>Jugar cuando conviene.</b> El indicador de abajo muestra cuánto devuelve en promedio cada peso según el acumulado de hoy.</li>
+    </ul>
+    <p><a href="https://claude.ai/artifact/NTeTzBAnxAHSeiVmhRWsDc" target="_blank" rel="noopener">Ver el informe completo del análisis</a></p>
+  </details>
+</section>
+
+<section class="grid2">
+  <div class="card" aria-labelledby="h-ev">
+    <h2 id="h-ev">¿Conviene jugar hoy?</h2>
+    <div class="ev-row">
+      <div><div class="eyebrow">Baloto</div><div class="ev-big" id="ev-b">…</div><div class="meter"><span id="ev-b-bar"></span></div></div>
+      <div><div class="eyebrow">Revancha</div><div class="ev-big" id="ev-r">…</div><div class="meter"><span id="ev-r-bar"></span></div></div>
+    </div>
+    <p class="small" id="ev-note"></p>
+    <details>
+      <summary class="small">Ajustes del cálculo</summary>
+      <div class="form">
+        <label for="s-bets">Apuestas por sorteo (Baloto)<input id="s-bets" type="number" min="1000" step="1000" value="236000"></label>
+        <label for="s-rbets">Apuestas por sorteo (Revancha)<input id="s-rbets" type="number" min="1000" step="1000" value="150000"></label>
+        <label for="s-tax">Retención sobre el premio (%)<input id="s-tax" type="number" min="0" max="60" value="20"></label>
+      </div>
+      <p class="small muted">Estimaciones: el reparto de premios menores se toma del plan publicado de Baloto (≈13 % de lo vendido) y se aplica igual a Revancha. Las apuestas vendidas no son públicas.</p>
+    </details>
+  </div>
+
+  <div class="card" aria-labelledby="h-last">
+    <h2 id="h-last">Último resultado</h2>
+    <div id="last"></div>
+    <label for="chk-in" class="mt">Revisa tu tiquete
+      <input id="chk-in" type="text" inputmode="numeric" autocomplete="off" placeholder="Ej: 3 11 24 36 42 + 9"></label>
+    <div id="chk-out" class="small"></div>
+  </div>
+</section>
+
+<section class="card" aria-labelledby="h-mine">
+  <div class="play-head">
+    <h2 id="h-mine">Mis jugadas</h2>
+    <button id="btn-clear" type="button" class="ghost small-btn">Borrar revisadas</button>
+  </div>
+  <p class="small muted">Se guardan solo en este navegador. Cuando salga el resultado de su sorteo, aquí verás cuántos aciertos tuvo cada una.</p>
+  <div id="mine"></div>
+</section>
+
+<section class="card" aria-labelledby="h-hist">
+  <h2 id="h-hist">Tu combinación frente al historial</h2>
+  <p class="small muted">¿Cuántas veces habría ganado en todos los sorteos desde 2017?</p>
+  <label for="hist-in">5 números y superbalota
+    <input id="hist-in" type="text" inputmode="numeric" autocomplete="off" placeholder="Ej: 7 14 21 28 35 + 7"></label>
+  <div id="hist-out" class="small"></div>
+</section>
+
+<footer>
+  <p><b>Juega con responsabilidad.</b> Nadie puede predecir el Baloto: esta herramienta no aumenta tu probabilidad de ganar el acumulado. Juega solo lo que estés dispuesto a perder. Juego para mayores de 18 años.</p>
+  <p id="data-status"></p>
+  <p>Datos: <a href="https://www.resultadobaloto.com/" target="_blank" rel="noopener">resultadobaloto.com</a> · Precios y reglas: <a href="https://baloto.com/novedadesbaloto" target="_blank" rel="noopener">baloto.com</a>. LotoMaster no está afiliado a Baloto ni a Coljuegos.</p>
+</footer>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>
