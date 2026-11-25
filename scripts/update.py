@@ -104,7 +104,9 @@ def main() -> int:
     DRAWS.write_text(json.dumps(draws, separators=(",", ":")))
 
     meta = json.loads(META.read_text()) if META.exists() else {}
-    m = re.search(r"Baloto: \$ ?([\d.,]+) millones, Revancha: \$ ?([\d.,]+) millones", home_raw)
+    m = (re.search(r"Baloto: \$ ?([\d.,]+) millones, Revancha: \$ ?([\d.,]+) millones", home_raw)
+         or re.search(r"asciende a \$ ?([\d.,]+) millones\s*,?\s*siendo el importe para la Revancha"
+                      r" un importe de \$ ?([\d.,]+) millones", home))
     if m:
         to_pesos = lambda s: int(float(s.replace(",", "")) * 1_000_000)  # noqa: E731
         meta["acumulado_baloto"] = to_pesos(m.group(1))
